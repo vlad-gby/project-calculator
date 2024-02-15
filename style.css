@@ -12,6 +12,7 @@ button{
 body{
   width:600px;
   margin: 0 auto;
+  margin-top: 10vh;
   background-color: rgb(169, 138, 155);
   font-family:Arial, Helvetica, sans-serif;
   text-align: center;
@@ -19,17 +20,15 @@ body{
 
 .calculator-body{
   height: 200px;
-  background-color: grey;
+  background-color: rgb(155, 155, 155);
   border: 3px solid black;
   border-radius: 8px;
-  /* box-sizing:inherit; */
-  padding: 0px;
+  padding: 2px;
   display: flex;
   flex-direction: column;
 }
 
 h1{
-  margin-top: 10vh;
   color: rgb(0, 119, 51);
 }
 
