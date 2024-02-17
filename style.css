@@ -19,7 +19,6 @@ body{
 }
 
 .calculator-body{
-  height: 200px;
   background-color: rgb(155, 155, 155);
   border: 3px solid black;
   border-radius: 8px;
@@ -29,7 +28,7 @@ body{
 }
 
 h1{
-  color: rgb(0, 119, 51);
+  color: black;
 }
 
 .text-line{
@@ -75,8 +74,12 @@ h1{
   flex-basis: 90px;
   background-color: rgb(185, 185, 185);
 }
-.operators button:last-child{
-  background-color: rgb(134, 189, 158);
+
+#equals{
+  background-color: rgb(135, 189, 158);
+}
+#clear{
+  font-size: 20px;
 }
 
 
