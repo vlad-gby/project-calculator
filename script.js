@@ -53,6 +53,11 @@ function mouseupHandler() {
 // ACTION HANDLERS
 function mouseupNumberHandler() {
   const addDigit = () => {
+    if(result){
+      clear();
+      display();
+    }
+
     if(!num1) {
       num1 = Number(this.textContent);
     }else if(num1 && !operator){
