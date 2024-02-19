@@ -52,65 +52,26 @@ function mouseupHandler() {
 
 // ACTION HANDLERS
 function mouseupNumberHandler() {
-  const addDigit = () => {
-    if(result){
-      clear();
-      display();
-    }
-
-    if(!num1) {
-      num1 = Number(this.textContent);
-    }else if(num1 && !operator){
-      num1 = Number(String(num1) + this.textContent);
-    }else if(operator && !num2) {
-      num2 = Number(this.textContent);
-    }else if(num2) {
-      num2 = Number(String(num2) + this.textContent)
-    }
+  if(result){
+    clear();
+    display();
   }
 
-  switch(this.textContent){
-    case '1':addDigit();
-    break;
-    case '2':addDigit();
-    break;
-    case '3':addDigit();
-    break;
-    case '4':addDigit();
-    break;
-    case '5':addDigit();
-    break;
-    case '6':addDigit();
-    break;
-    case '7':addDigit();
-    break;
-    case '8':addDigit();
-    break;
-    case '9':addDigit();
-    break;
-    case '0':addDigit();
-    break;
+  if(!num1) {
+    num1 = Number(this.textContent);
+  }else if(num1 && !operator){
+    num1 = Number(String(num1) + this.textContent);
+  }else if(operator && !num2) {
+    num2 = Number(this.textContent);
+  }else if(num2) {
+    num2 = Number(String(num2) + this.textContent)
   }
+
   display();
-
 }
 function mouseupOperatorHandler() {
-  switch(this.textContent){
-    case '+':
-      if(!operator) operator = this.textContent;
-    break;
-    case '-':
-      if(!operator) operator = this.textContent;
-    break;
-    case '*':
-      if(!operator) operator = this.textContent;
-    break;
-    case '/':
-      if(!operator) operator = this.textContent;
-    break;
-  }
+  if(!operator) operator = this.textContent;
   display();
-
 }
 
 
@@ -118,20 +79,6 @@ let num1;
 let operator;
 let num2;
 let result;
-
-// OPERATIONS
-function add(a, b){
-  return a + b;
-}
-function subtract(a, b){
-  return a - b;
-}
-function multiply(a, b){
-  return a * b;
-}
-function divide(a, b){
-  return a / b;
-}
 
 
 function display(){
@@ -157,7 +104,9 @@ function clear(){
   display();
 }
 
+// =========ATTENTION=====OPERATOR AND THEN A NUMBER??======
 function equals(){
+  if(!num1) return;
   switch(operator){
     case '+': result = num1 + num2;
     break;
