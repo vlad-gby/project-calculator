@@ -13,7 +13,7 @@ body{
   width:600px;
   margin: 0 auto;
   margin-top: 10vh;
-  background-color: rgb(169, 138, 155);
+  background-color: rgb(174, 155, 165);
   font-family:Arial, Helvetica, sans-serif;
   text-align: center;
 }
@@ -33,7 +33,7 @@ h1{
 
 .text-line{
   background-color: rgb(196, 196, 196);
-  height: 60px;
+  min-height: 60px;
   border-radius: 8px;
   margin: 2px;
   padding:8px;
