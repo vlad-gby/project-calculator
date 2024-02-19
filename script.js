@@ -51,9 +51,9 @@ function mouseupHandler() {
 
 // ACTION HANDLERS
 function mouseupNumberHandler() {
-  if(result){
-    clear();
-    display();
+  if(check === 1){
+    check = 0;
+    output.textContent = '';
   }
 
   if(!nums[0]){
@@ -81,6 +81,7 @@ function mouseupOperatorHandler() {
 let nums = [];
 let operators = [];
 let result;
+let check;
 
 function clear(){
   nums = [];
@@ -93,12 +94,12 @@ function equals(){
   // NO CALCLULATIONS
   if(!nums[0]) {
     result = 'Nothing entered';
-    display();
+    output.textContent = result;
     return;
   };
   if(nums.length === 1) {
     result = nums[0];
-    display();
+    output.textContent = result;
     return;
   };
 
@@ -134,6 +135,10 @@ function equals(){
     result = '~' + String(Math.round(result * 100) / 100);
   }
   console.log(result);
+  nums = [];
+  operators = [];
+  result;
+  check = 1;
 
   output.textContent = result;
 }
