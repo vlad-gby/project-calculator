@@ -2,6 +2,13 @@
   box-sizing: border-box;
 }
 
+input:focus,
+textarea:focus,
+select:focus,
+a:focus {
+  outline: none;
+}
+
 button{
   display: block;
   border-radius: 8px;
@@ -78,8 +85,9 @@ h1{
 #equals{
   background-color: rgb(135, 189, 158);
 }
-#clear{
-  font-size: 20px;
+
+#clear, #erase, .keyboard{
+  font-size: 18px;
 }
 
 

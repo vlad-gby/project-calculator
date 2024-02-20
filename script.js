@@ -67,6 +67,8 @@ function mouseupNumberHandler() {
     output.textContent = output.textContent + ' ' + String(this.textContent);
     nums.push(Number(this.textContent));
   }
+  console.log(nums);
+  console.log(operators);
 }
 function mouseupOperatorHandler() {
   if(!nums[0]) return;
@@ -137,4 +139,24 @@ function equals(){
 
   output.textContent = result;
 }
+
+// ERASE FATURE
+const erase = document.querySelector('#erase');
+erase.addEventListener('mouseup', e => {
+  if(nums.length === operators.length){
+    output.textContent = output.textContent.replace(' ' + operators.at(-1), '');
+    operators.pop();
+  }else if(operators.length === 0){
+    output.textContent = output.textContent.replace(nums.at(-1), '');
+    nums.pop();
+  }else if(nums.length > operators.length){
+    output.textContent = output.textContent.replace(' ' + nums.at(-1), '');
+    nums.pop();
+  }
+});
+
+
+
+
+
 
