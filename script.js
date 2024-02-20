@@ -67,8 +67,6 @@ function mouseupNumberHandler() {
     output.textContent = output.textContent + ' ' + String(this.textContent);
     nums.push(Number(this.textContent));
   }
-
-  console.log(nums);
 }
 function mouseupOperatorHandler() {
   if(!nums[0]) return;
@@ -116,8 +114,6 @@ function equals(){
       i--;
     }
   };
-  console.log(nums);
-  console.log(operators);
 
   // ADD EVERYTHIGN ELSE UP
   result = operators.reduce((result, operator, index) => {
@@ -134,7 +130,6 @@ function equals(){
   if(result !== Math.round(result * 100) / 100){
     result = '~' + String(Math.round(result * 100) / 100);
   }
-  console.log(result);
   nums = [];
   operators = [];
   result;
