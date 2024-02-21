@@ -2,8 +2,14 @@ const buttons = document.querySelectorAll('button');
 const numButtons = document.querySelectorAll('.numbers button');
 const operatorButtons = document.querySelectorAll('.operator');
 const clearBtn = document.querySelector('#clear');
+const eraseBtn = document.querySelector('#erase');
 const equalsBtn = document.querySelector('#equals');
 const output = document.querySelector('.text-line p');
+
+let nums = [];
+let operators = [];
+let result;
+let check;
 
 buttons.forEach((button) => {
   button.addEventListener('mouseover', mouseoverHandler);
@@ -19,8 +25,8 @@ operatorButtons.forEach((button) => {
   button.addEventListener('mouseup', mouseupOperatorHandler);
 });
 
-clearBtn.addEventListener('mouseup', clear);
-equalsBtn.addEventListener('mouseup', equals);
+clearBtn.addEventListener('mouseup', clearHandler);
+equalsBtn.addEventListener('mouseup', equalsHandler);
 
 
 // UI HANDLERS FOR ALL BUTTONS
@@ -49,85 +55,47 @@ function mouseupHandler() {
   this.style.backgroundColor = `rgb(${R + 20}, ${G + 20}, ${B + 20})`;
 }
 
-// ACTION HANDLERS
+// ACTION HANDLERS==================
 function mouseupNumberHandler() {
-  if(check === 1 && !operators[0]){
+  if(check === 1 && !operators[0] && output.textContent !== ' -'){
     check = 0;
     nums = [];
     output.textContent = '';
   }
+  if(nums.at(-1) === 0 && nums.length > operators.length) return;
 
-  if(!nums[0]){
-    if(this.textContent !== '0'){
-      result = 0;
-      output.textContent = output.textContent + String(this.textContent);
-      nums.push(Number(this.textContent));
-    }
-  } else if(nums.length - operators.length === 1){
+  if(nums[0] === undefined && output.textContent === ' -'){
+    output.textContent = output.textContent + this.textContent;
+    nums.push(Number(this.textContent) * (-1));
+  }else if(nums[0] === undefined && this.textContent !== '0'){
+    result = 0;
+    output.textContent = output.textContent + this.textContent;
+    nums.push(Number(this.textContent));
+  }else if(nums.length > operators.length){
     nums[nums.length - 1] = Number(String(nums.at(-1)) + this.textContent);
-    output.textContent = output.textContent + String(this.textContent);
-  } else if(nums.length == operators.length){
-    output.textContent = output.textContent + ' ' + String(this.textContent);
+    output.textContent = output.textContent + this.textContent;
+  }else if(nums.length == operators.length){
+    output.textContent = output.textContent + ' ' + this.textContent;
     nums.push(Number(this.textContent));
   }
 }
-function mouseupOperatorHandler() {
-  if(!nums[0]) return;
-  operators.push(this.textContent);
 
+function mouseupOperatorHandler() {
+  if(nums[0] === undefined && this.textContent !== '-') return;
+  if(nums[0] === undefined && this.textContent === '-'){
+    output.textContent = output.textContent + ' ' + String(this.textContent);
+    return;
+  }
+  if(nums.length === operators.length) return;
+
+  operators.push(this.textContent);
   output.textContent = output.textContent + ' ' + String(this.textContent);
 }
-function keydownHandler(e){
-  if(Number(e.key) + 1){
-    const currBtn = Array.from(numButtons).find((btn) => {
-      return btn.textContent === e.key;
-    });
-    mouseupNumberHandler.call(currBtn);
-  }else if(e.key === '*' || e.key === '/'
-  || e.key === '+' || e.key === '-'){
-    const currBtn = Array.from(operatorButtons).find((btn) => {
-      return btn.textContent === e.key;
-    });
-    mouseupOperatorHandler.call(currBtn);
-  }else if(e.key === 'Enter'){
-    equals();
-  }else if(e.key === 'Backspace'){
-    eraseHandler();
-  }
-  console.log(nums);
-  console.log(operators);
-}
-function eraseHandler(e){
-  if(result){
-    output.textContent = '';
-  }else if(nums.length === operators.length){
-    output.textContent = output.textContent.replace(' ' + operators.at(-1), '');
-    operators.pop();
-  }else if(operators.length === 0){
-    output.textContent = output.textContent.replace(nums.at(-1), '');
-    nums.pop();
-  }else if(nums.length > operators.length){
-    output.textContent = output.textContent.replace(' ' + nums.at(-1), '');
-    nums.pop();
-  }
-}
 
+function equalsHandler(){
 
-let nums = [];
-let operators = [];
-let result;
-let check;
-
-function clear(){
-  nums = [];
-  operators = [];
-  result = 0;
-  output.textContent = '';
-}
-
-function equals(){
   // NO CALCLULATIONS
-  if(!nums[0]) {
+  if(nums[0] === undefined) {
     result = 'Nothing entered';
     output.textContent = result;
     return;
@@ -163,42 +131,60 @@ function equals(){
     return result;
   }, nums[0]);
 
-  // CHECK IF A BIG DECIMAL
-  if(result !== Math.round(result * 100) / 100){
-    result = '~' + String(Math.round(result * 100) / 100);
-  }
   nums = [result];
   operators = [];
   check = 1;
 
-  output.textContent = nums[0];
+  // CHECK IF A BIG DECIMAL
+  if(result !== Math.round(result * 100) / 100){
+    output.textContent = '~' + Math.round(result * 100) / 100;
+  }else{
+    output.textContent = nums[0];
+  }
+}
+
+function eraseHandler(e){
+  if(nums.length === operators.length && operators.length !== 0){
+    output.textContent = output.textContent.replace(' ' + operators.at(-1), '');
+    operators.pop();
+  }else if(operators.length === 0){
+    output.textContent = ''
+    nums.pop();
+  }else if(nums.length > operators.length){
+    output.textContent = output.textContent.replace(' ' + nums.at(-1), '');
+    nums.pop();
+  }else output.textContent = '';
+}
+function clearHandler(){
+  nums = [];
+  operators = [];
+  result = 0;
+  output.textContent = '';
+}
+
+function keydownHandler(e){
+  if(Number(e.key) || e.key === '0'){
+    const currBtn = Array.from(numButtons).find((btn) => {
+      return btn.textContent === e.key;
+    });
+    mouseupNumberHandler.call(currBtn);
+  }else if(e.key === '*' || e.key === '/'
+  || e.key === '+' || e.key === '-'){
+    const currBtn = Array.from(operatorButtons).find((btn) => {
+      return btn.textContent === e.key;
+    });
+    mouseupOperatorHandler.call(currBtn);
+  }else if(e.key === 'Enter'){
+    equalsHandler();
+  }else if(e.key === 'Backspace'){
+    eraseHandler();
+  }
 }
 
 // ERASE FATURE
-const erase = document.querySelector('#erase');
-erase.addEventListener('mouseup', eraseHandler);
+
+eraseBtn.addEventListener('mouseup', eraseHandler);
 
 // KEYBOARD FEATURE
-const keyboardBtn = document.querySelector('.keyboard');
-let keyboardInput = 0;
-
-keyboardBtn.addEventListener('mouseup', e => {
-  if(keyboardInput === 0){
-    keyboardBtn.style.backgroundColor = 'rgb(120, 174, 143)';
-    keyboardInput = 1;
-
-    window.addEventListener('keydown', keydownHandler);
-
-  }else if(keyboardInput === 1){
-    keyboardBtn.style.backgroundColor = 'rgb(170, 170, 170)';
-    keyboardInput = 0;
-
-    window.removeEventListener('keydown', keydownHandler);
-  }
-});
-
-
-
-
-
+window.addEventListener('keydown', keydownHandler);
 
