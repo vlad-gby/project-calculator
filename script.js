@@ -51,30 +51,65 @@ function mouseupHandler() {
 
 // ACTION HANDLERS
 function mouseupNumberHandler() {
-  if(check === 1){
+  if(check === 1 && !operators[0]){
     check = 0;
+    nums = [];
     output.textContent = '';
   }
 
   if(!nums[0]){
-    output.textContent = output.textContent + String(this.textContent);
-    nums.push(Number(this.textContent));
+    if(this.textContent !== '0'){
+      result = 0;
+      output.textContent = output.textContent + String(this.textContent);
+      nums.push(Number(this.textContent));
+    }
   } else if(nums.length - operators.length === 1){
     nums[nums.length - 1] = Number(String(nums.at(-1)) + this.textContent);
     output.textContent = output.textContent + String(this.textContent);
-    console.log();
   } else if(nums.length == operators.length){
     output.textContent = output.textContent + ' ' + String(this.textContent);
     nums.push(Number(this.textContent));
   }
-  console.log(nums);
-  console.log(operators);
 }
 function mouseupOperatorHandler() {
   if(!nums[0]) return;
   operators.push(this.textContent);
 
   output.textContent = output.textContent + ' ' + String(this.textContent);
+}
+function keydownHandler(e){
+  if(Number(e.key) + 1){
+    const currBtn = Array.from(numButtons).find((btn) => {
+      return btn.textContent === e.key;
+    });
+    mouseupNumberHandler.call(currBtn);
+  }else if(e.key === '*' || e.key === '/'
+  || e.key === '+' || e.key === '-'){
+    const currBtn = Array.from(operatorButtons).find((btn) => {
+      return btn.textContent === e.key;
+    });
+    mouseupOperatorHandler.call(currBtn);
+  }else if(e.key === 'Enter'){
+    equals();
+  }else if(e.key === 'Backspace'){
+    eraseHandler();
+  }
+  console.log(nums);
+  console.log(operators);
+}
+function eraseHandler(e){
+  if(result){
+    output.textContent = '';
+  }else if(nums.length === operators.length){
+    output.textContent = output.textContent.replace(' ' + operators.at(-1), '');
+    operators.pop();
+  }else if(operators.length === 0){
+    output.textContent = output.textContent.replace(nums.at(-1), '');
+    nums.pop();
+  }else if(nums.length > operators.length){
+    output.textContent = output.textContent.replace(' ' + nums.at(-1), '');
+    nums.pop();
+  }
 }
 
 
@@ -132,26 +167,33 @@ function equals(){
   if(result !== Math.round(result * 100) / 100){
     result = '~' + String(Math.round(result * 100) / 100);
   }
-  nums = [];
+  nums = [result];
   operators = [];
-  result;
   check = 1;
 
-  output.textContent = result;
+  output.textContent = nums[0];
 }
 
 // ERASE FATURE
 const erase = document.querySelector('#erase');
-erase.addEventListener('mouseup', e => {
-  if(nums.length === operators.length){
-    output.textContent = output.textContent.replace(' ' + operators.at(-1), '');
-    operators.pop();
-  }else if(operators.length === 0){
-    output.textContent = output.textContent.replace(nums.at(-1), '');
-    nums.pop();
-  }else if(nums.length > operators.length){
-    output.textContent = output.textContent.replace(' ' + nums.at(-1), '');
-    nums.pop();
+erase.addEventListener('mouseup', eraseHandler);
+
+// KEYBOARD FEATURE
+const keyboardBtn = document.querySelector('.keyboard');
+let keyboardInput = 0;
+
+keyboardBtn.addEventListener('mouseup', e => {
+  if(keyboardInput === 0){
+    keyboardBtn.style.backgroundColor = 'rgb(120, 174, 143)';
+    keyboardInput = 1;
+
+    window.addEventListener('keydown', keydownHandler);
+
+  }else if(keyboardInput === 1){
+    keyboardBtn.style.backgroundColor = 'rgb(170, 170, 170)';
+    keyboardInput = 0;
+
+    window.removeEventListener('keydown', keydownHandler);
   }
 });
 

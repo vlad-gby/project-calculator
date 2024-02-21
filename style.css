@@ -1,14 +1,6 @@
 *{
   box-sizing: border-box;
 }
-
-input:focus,
-textarea:focus,
-select:focus,
-a:focus {
-  outline: none;
-}
-
 button{
   display: block;
   border-radius: 8px;
