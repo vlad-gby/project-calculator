@@ -27,10 +27,6 @@ body{
   flex-direction: column;
 }
 
-h1{
-  color: black;
-}
-
 .text-line{
   background-color: rgb(196, 196, 196);
   min-height: 60px;
